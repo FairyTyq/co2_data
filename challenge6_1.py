@@ -1,17 +1,26 @@
 # -*- coding:utf-8 -*-
 import pandas as pd
 def co2(dataset):
-    # ¶ÁÈ¡ÊÀ½çÒøĞĞÆøºò±ä»¯Êı¾İ¼¯
-    df_climate = pd.read_excel('ClimateChange.xlsx',sheetname='Data')
-    df_country = pd.read_excel('ClimateChange.xlsx',sheetname='Country')
-    df_series = pd.read_excel('ClimateChange.xlsx',sheetname='Series')
-    # 1.²é¿´Êı¾İÎÄ¼ş½á¹¹
+    # è¯»å–ä¸–ç•Œé“¶è¡Œæ°”å€™å˜åŒ–æ•°æ®é›†
+    df_climate = pd.read_excel(dataset,sheetname='Data')
+    df_country = pd.read_excel(dataset,sheetname='Country')
+    df_series = pd.read_excel(dataset,sheetname='Series')
+    # 1.æŸ¥çœ‹æ•°æ®æ–‡ä»¶ç»“æ„
     
-    # 2.½«¹ú¼ÒºÍËùÔÚµÄÊÕÈëÈºÌåÀà±ğ²úÉúÁªÏµ
-    df_merge = df_climate.merge(de_country,left_on='Country name',right_on='Country name',how='outer')
-    # 3.´¦Àí DataFrame ÖĞµÄ²»±ØÒªÊı¾İºÍÈ±Ê§Êı¾İ
-    # 4.×¢ÒâÈ±Ê§Öµ²¢²»ÊÇNaNµÄĞÎÊ½
-    # 5.½«×îÖÕ·µ»ØµÄ DataFrame ´¦Àí³ÉÌôÕ½ÒªÇóµÄ¸ñÊ½
-    de_merge['Country name','Income group',]
+    # 2.å°†å›½å®¶å’Œæ‰€åœ¨çš„æ”¶å…¥ç¾¤ä½“ç±»åˆ«äº§ç”Ÿè”ç³»
+    df1_tmp = df_climate[['Country name','Series code',1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011]]
+    df1 = df1_tmp[df1_tmp['Series code']=='EN.ATM.CO2E.KT']
+    df2 = df_country[['Country name','Income group']]
+    # df_res = pd.concat([df2,df1],axis=1)
+    df_res = df2.merge(df1)
+    #df_res2 = df_res[df_res['Series code']=='EN.ATM.CO2E.KT']
+    print(df_res.head(20))
+    #df_merge = df_climate.merge(de_country,left_on='Country name',right_on='Country name',how='outer')
+    # 3.å¤„ç† DataFrame ä¸­çš„ä¸å¿…è¦æ•°æ®å’Œç¼ºå¤±æ•°æ®
+    # 4.æ³¨æ„ç¼ºå¤±å€¼å¹¶ä¸æ˜¯NaNçš„å½¢å¼
+    # 5.å°†æœ€ç»ˆè¿”å›çš„ DataFrame å¤„ç†æˆæŒ‘æˆ˜è¦æ±‚çš„æ ¼å¼
     
-    return results
+    #return results
+
+if __name__ == '__main__':
+    co2('ClimateChange.xlsx')
