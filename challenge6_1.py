@@ -60,13 +60,18 @@ def co2(dataset):
     print("LOW ESS :  %s"%Low_ess)
     print("HIGH ESS :  %s"%High_ess)
     
-    df_c = pd.DataFrame({'Sum emissions':df_b['sum'].sum(),'Highest emissions':df_b['sum'].max(),'Lowest emissions':df_b['sum'].min(),"Highest emission country":High_ess,"Lowest emission country":Low_ess})
-    print('df_c%s'%df_c)
+    results = pd.DataFrame({'Sum emissions':df_b['sum'].sum(),"Highest emission country":High_ess,'Highest emissions':df_b['sum'].max(),"Lowest emission country":Low_ess,'Lowest emissions':df_b['sum'].min()})
+    
+    #index_tmp = ['High income: OECD','High income: nonOECD','Low income','Lower middle income','Upper middle income']
+    #columns_tmp = ['Sum emissions','Highest emission country','Highest emissions','Lowest emission country','Lowest emissions']
+    #results = pd.DataFrame(list(zip(df_b['sum'].sum(),High_ess,df_b['sum'].max(),Low_ess,df_b['sum'].min())),index=index_tmp,columns=columns_tmp)
+    print(results)
+    
+    
     #print('loc%s'%df_c.loc[])
     # 3.处理 DataFrame 中的不必要数据和缺失数据
     # 4.注意缺失值并不是NaN的形式
     # 5.将最终返回的 DataFrame 处理成挑战要求的格式
-    results = df_c
     return results
 
 if __name__ == '__main__':
