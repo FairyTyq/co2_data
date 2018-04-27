@@ -1,6 +1,5 @@
 # -*- coding:utf-8 -*-
 import pandas as pd
-import numpy as np
 
 def co2():
     # 读取世界银行气候变化数据集
@@ -12,24 +11,17 @@ def co2():
     
     # 2.将国家和所在的收入群体类别产生联系
     df_st = df_climate[df_climate['Series code']=='EN.ATM.CO2E.KT']
-    df1 = df_climate[['Country name','Series code',1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011]]
-    df2 = df_country[['Country name','Income group']]
-    #df1_tmp = df_st[[1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011]]
-    df_merge = df2.merge(df1).replace('..',np.nan).replace('n/a',np.nan)
-    print('before change  \n %s'%df_merge)
-    df_m = df_merge[[1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011]]
-    df_fill = df_m.fillna(method='ffill',axis=1).fillna(method='bfill',axis=1)
-    df_drop = df_fill.dropna(thresh=True)
-    print("*****df_drop*******:   %s "%df_drop)
-    df_merge[[1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011]] = df_drop[[1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011]]
-    #df1 = df1_tmp[df1_tmp['Series code']=='EN.ATM.CO2E.KT']
-    # 将'..'替换成0，（还是说需要按照前面的数据进行填充？？）
-    #df_resb = df_resa.fillna(method='ffill',axis=1).fillna(method='bfill',axis=1)
-    #df_res = df_resb.dropna(axis=0,how='all')
-    print("-------df_merge------%s"%df_merge.head(15))
-    df_merge['total']= df_merge[[1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011]].apply(lambda x:x.sum(),axis=1)
-    df_select = df_merge[['Country name','Income group','Series code','total']]
-    df_groupby = df_select.groupby(['Income group'])
+    df1 = df_st[['Country code',1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011]].set_index('Country code')
+    df1.replace({'..':pd.np.NaN},inplace=True)
+    df1 = df1.fillna(method='ffill',axis=1).fillna(method='bfill',axis=1)
+    df1.dropna(how='all',inplace=True)
+    df1['total'] = df1.sum(axis=1)
+
+    
+    df2 = df_country[['Country code','Country name','Income group']].set_index('Country code')
+    
+    df_comb = pd.merge(df1,df2,left_index=True,right_index=True)
+    df_groupby = df_comb.groupby('Income group')
     
     # 获取各个收入群体内最低排放的国家名字
     
