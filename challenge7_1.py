@@ -6,7 +6,7 @@ def co2():
     dataset = 'ClimateChange.xlsx'
     df_climate = pd.read_excel(dataset,sheetname='Data')
     df_country = pd.read_excel(dataset,sheetname='Country')
-    df_series = pd.read_excel(dataset,sheetname='Series')
+    #df_series = pd.read_excel(dataset,sheetname='Series')
     # 1.查看数据文件结构
     
     # 2.将国家和所在的收入群体类别产生联系
