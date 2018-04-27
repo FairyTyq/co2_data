@@ -12,15 +12,21 @@ def co2():
     # 2.将国家和所在的收入群体类别产生联系
     df_st = df_climate[df_climate['Series code']=='EN.ATM.CO2E.KT']
     df1 = df_st[['Country code',1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011]].set_index('Country code')
+    # 替换 .. 字符
     df1.replace({'..':pd.np.NaN},inplace=True)
+    # 填充数据
     df1 = df1.fillna(method='ffill',axis=1).fillna(method='bfill',axis=1)
+    # 去处空白数据
     df1.dropna(how='all',inplace=True)
+    # 对每个国家的数据求和
     df1['total'] = df1.sum(axis=1)
 
     
     df2 = df_country[['Country code','Country name','Income group']].set_index('Country code')
     
+    # 合并两个数据集
     df_comb = pd.merge(df1,df2,left_index=True,right_index=True)
+    # 分组
     df_groupby = df_comb.groupby('Income group')
     
     # 获取各个收入群体内最低排放的国家名字
@@ -33,6 +39,7 @@ def co2():
     df_high = df_groupby.apply(lambda t:t[t.total==t.total.max()])
     High_ess = df_high['Country name']
     
+    # 处理成最终的DataFrame形式
     index_tmp = ['High income: OECD','High income: nonOECD','Low income','Lower middle income','Upper middle income']
     columns_tmp = ['Income group','Sum emissions','Highest emission country','Highest emissions','Lowest emission country','Lowest emissions']
     results = pd.DataFrame(list(zip(index_tmp,df_groupby['total'].sum(),High_ess,df_high['total'],Low_ess,df_low['total'])),columns=columns_tmp).set_index('Income group')
